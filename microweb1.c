@@ -75,7 +75,7 @@ int main (int argc, char *argv[]) {
             
 
             recv(client_sockfd, buf, BUFSIZ, 0);
-            printf("Soy buffer: %s\n", buf);
+            //printf("Soy buffer: %s\n", buf);
 
             char *token, *delimitador[5] = {" ","/","."}, delimitador2[5]= "/";
             char url[50]= ".", *aux[50], *aux2[5], *compresExt[5] = {".compres"};
@@ -91,38 +91,39 @@ int main (int argc, char *argv[]) {
 
             strcat(url, aux[0]);
             printf("Soy Url: %s\n", url);
-            i = 0;
-            token = strtok(url, delimitador2);
-            while (token != NULL){
-                //printf("%s\n", token);
-                token = strtok(NULL, delimitador2);
-                aux2[i] = token;
-                i++;
-            }
+            // i = 0;
+            // token = strtok(url, delimitador2);
+            // while (token != NULL){
+            //     //printf("%s\n", token);
+            //     token = strtok(NULL, delimitador2);
+            //     aux2[i] = token;
+            //     i++;
+            // }
             char mydco[1024] = "";
             char myb64[1024] = "";
             char mydst[1024] = "";
 
 
-            char *files[5] = {"0",aux2[0]};
-            strcat(aux2[0], compresExt[0]);
-            files[2] = aux2[0];
-            printf("Soy file1: %s\n", files[1]);
-            printf("Soy file2: %s\n", files[2]);
+            // char *files[5] = {"0",aux2[0]};
+            // strcat(aux2[0], compresExt[0]);
+            // files[2] = aux2[0];
+            // printf("Soy file1: %s\n", files[1]);
+            // printf("Soy file2: %s\n", files[2]);
            
             //leer el archivo enviado en el encabezado GET
             //read_file(url, html);
             if (strcmp(url, ".") == 0 || strcmp(url, "./") == 0){
+                printf("hoal");
                 read_file("./index.html", html); 
                 b64_encode(html, myb64);
-                send(client_sockfd, myb64,strlen(html),0);       
+                send(client_sockfd, myb64, strlen(myb64),0);       
             }
             else if (read_file(url, html)){
                 b64_encode(html, myb64);
-                // printf("La cadena\n[%s]\nse codifica en base64 como:\n[%s]\n", html, myb64);
-                // printf("\n");
-
-                //send(client_sockfd, myb64, strlen(html), 0);
+                printf("La cadena\n[%s]\nse codifica en base64 como:\n[%s]\n", html, myb64);
+                b64_decode(myb64, mydst);
+                printf("La cadena\n[%s]\nse decodifica de base64 como:\n[%s]\n", myb64, mydst);
+                // send(client_sockfd, myb64, strlen(html), 0);
                 send(client_sockfd, myb64,strlen(html),0);
             }else{
                 read_file("./error.html", html);
